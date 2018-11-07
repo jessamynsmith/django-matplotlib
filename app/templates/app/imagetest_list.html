@@ -1,0 +1,21 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+    
+    <h3>Image Test</h3>
+    
+    <p><a href="{% url 'image_create' %}">Create</a></p>
+    
+    <table border="1">
+    <thead>
+    <tr><th>Name</th><th>Image</th></tr>
+    </thead>
+    {% for object in object_list %}
+        <tr>
+            <td>{{ object.name }}</td>
+            <td><img src="{{ object.image.url }}" style="max-width: 200px;"></td>
+        </tr>
+    {% endfor %}
+    </table>
+    
+{% endblock %}
