@@ -1,0 +1,19 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+    
+    <h3>Thumbnail Test</h3>
+    
+    <p><a href="{% url 'thumbnail_create' %}">Create</a></p>
+    
+    <table border="1">
+    <thead>
+    <tr><th>Name</th><th>Image</th></tr>
+    </thead>
+        <tr>
+            <td>{{ object.name }}</td>
+            <td><img src="{{ object.thumbnail.url }}"></td>
+        </tr>
+    </table>
+    
+{% endblock %}
