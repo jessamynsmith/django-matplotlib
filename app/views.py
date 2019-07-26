@@ -22,14 +22,33 @@ def generate_plot():
 
 
 def crop_image(original_image):
+    thumbnail_dim = 200
     buf = io.BytesIO()
 
     original_image = Image.open(original_image)
-    new_dim = 200
+    width, height = original_image.size
+    min_dim = min(width, height)
+    max_dim = max(width, height)
+    if min_dim > thumbnail_dim:
+        conversion_ratio = (float(max_dim) / min_dim)
+    # TODO Handle a file that's already smaller than minimum size
+    else:
+        conversion_ratio = (float(min_dim) / max_dim)
+
+    # Scale the thumbnail dimension, rounding up and adding 1 to ensure the minimum
+    # dimension will still be greater than thumbnail_dim
+    new_dim = int(round(conversion_ratio * thumbnail_dim)) + 1
+
     size = (new_dim, new_dim)
     original_image.thumbnail(size, Image.ANTIALIAS)
 
-    original_image.save(buf, format='JPEG', quality=100)
+    new_width, new_height = original_image.size
+    left = abs(new_width - thumbnail_dim) / 2
+    top = abs(new_height - thumbnail_dim) / 2
+    right = (new_width + thumbnail_dim) / 2
+    bottom = (new_height + thumbnail_dim) / 2
+    cropped_image = original_image.crop((left, top, right, bottom))
+    cropped_image.save(buf, format='JPEG', quality=100)
 
     buf.seek(0)
     return buf
@@ -70,7 +89,7 @@ class ThumbnailCreateView(CreateView):
         self.object = form.save(commit=False)
 
         image_data = crop_image(self.object.thumbnail)
-        self.object.thumbnail.save('thumbnail.jpg', ContentFile(image_data.read()))
+        self.object.thumbnail.save('my_thumbnail.jpg', ContentFile(image_data.read()))
         self.object.save()
 
         return HttpResponseRedirect(self.get_success_url())
