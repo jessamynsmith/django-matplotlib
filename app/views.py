@@ -23,19 +23,13 @@ def generate_plot():
 
 def crop_image(original_image):
     buf = io.BytesIO()
+
     original_image = Image.open(original_image)
     new_dim = 200
-    width, height = original_image.size  # Get dimensions
+    size = (new_dim, new_dim)
+    original_image.thumbnail(size, Image.ANTIALIAS)
 
-    left = (width - new_dim) / 2
-    top = (height - new_dim) / 2
-    right = (width + new_dim) / 2
-    bottom = (height + new_dim) / 2
-
-    # Crop the center of the image
-    cropped_image = original_image.crop((left, top, right, bottom))
-
-    cropped_image.save(buf, format='JPEG', quality=100)
+    original_image.save(buf, format='JPEG', quality=100)
 
     buf.seek(0)
     return buf
@@ -76,8 +70,7 @@ class ThumbnailCreateView(CreateView):
         self.object = form.save(commit=False)
 
         image_data = crop_image(self.object.thumbnail)
-        thumbnail_name = self.object.thumbnail.file.name.replace('.', '_thumbnail.')
-        self.object.thumbnail.save(thumbnail_name, ContentFile(image_data.read()))
+        self.object.thumbnail.save('thumbnail.jpg', ContentFile(image_data.read()))
         self.object.save()
 
         return HttpResponseRedirect(self.get_success_url())
