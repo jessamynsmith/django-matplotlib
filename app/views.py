@@ -68,6 +68,10 @@ class ImageCreateView(CreateView):
 
         return HttpResponseRedirect(self.get_success_url())
 
+    def form_invalid(self, form):
+        print('ImageCreateView form_invalid', form.errors)
+        super().form_invalid(form)
+
 
 class ImageListView(ListView):
     model = image_models.ImageTest
@@ -93,3 +97,7 @@ class ThumbnailCreateView(CreateView):
         self.object.save()
 
         return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, form):
+        print('ThumbnailCreateView form_invalid', form.errors)
+        super().form_invalid(form)

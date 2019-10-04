@@ -4,7 +4,8 @@
     
     <h3>Image Test</h3>
     
-    <p><a href="{% url 'image_create' %}">Create</a></p>
+    <p><a href="{% url 'image_create' %}">Create Image</a></p>
+    <p><a href="{% url 'thumbnail_create' %}">Create Thumbnail</a></p>
     
     <table border="1">
     <thead>
@@ -13,7 +14,7 @@
     {% for object in object_list %}
         <tr>
             <td>{{ object.name }}</td>
-            <td><img src="{{ object.image.url }}" style="max-width: 200px;"></td>
+            <td><img src="{{ object.image.url }}" style="max-width: 200px;" alt="{{ object.name }}"></td>
         </tr>
     {% endfor %}
     </table>
