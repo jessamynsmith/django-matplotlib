@@ -3,7 +3,7 @@ cycler==0.10.0
 Django==2.2.8
 kiwisolver==1.0.1
 matplotlib==2.2.3
-numpy==1.15.4
+numpy==1.22.0
 Pillow==6.2.0
 pycairo==1.18.0
 PyGObject==3.30.1
